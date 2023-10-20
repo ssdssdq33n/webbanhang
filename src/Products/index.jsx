@@ -27,6 +27,13 @@ function Products({
       detail: "Thanh toán thành công",
     });
   };
+  const show5 = () => {
+    toast.current.show({
+      severity: "success",
+      summary: "Announcement!",
+      detail: "Successful payment",
+    });
+  };
   const [clicks, setClick] = useState([]);
   const [count, setCount] = useState(0);
   const data = [
@@ -119,9 +126,9 @@ function Products({
         filters={giatri}
         tableStyle={{ minWidth: "60rem" }}
         paginator
-        currentPageReportTemplate="Hiển thị {first} đến {last} trong số {totalRecords} bản ghi"
+        currentPageReportTemplate="Hiển thị {first} đến {last} trong số {totalRecords} sản phẩm"
         rows={10}
-        rowsPerPageOptions={[2, 4, 6]}
+        rowsPerPageOptions={[2, 3, 4]}
         className="datatable-responsive"
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       >
@@ -157,6 +164,9 @@ function Products({
             setShowDialog={setShowDialog}
             count={count}
             show1={show1}
+            value={value}
+            show5={show5}
+            setSoluong={setSoluong}
           />
         </Dialog>
       </div>

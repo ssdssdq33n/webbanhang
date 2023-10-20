@@ -6,12 +6,28 @@ import { useState, useRef } from "react";
 import { Dialog } from "primereact/dialog";
 import Thanhtoan from "./Thanhtoan";
 import { Toast } from "primereact/toast";
-function Carts({ clicks, setCount, count, setShowDialog, show1 }) {
+function Carts({
+  clicks,
+  setCount,
+  count,
+  setShowDialog,
+  show1,
+  value,
+  show5,
+  setSoluong,
+}) {
   const [cart, setCart] = useState({});
   const [showThanhToan, setShowThanhToan] = useState(false);
   const toast = useRef(null);
 
   const show = () => {
+    toast.current.show({
+      severity: "error",
+      summary: "Announcement",
+      detail: "No products in cart yet",
+    });
+  };
+  const show3 = () => {
     toast.current.show({
       severity: "error",
       summary: "Thông báo",
@@ -52,11 +68,12 @@ function Carts({ clicks, setCount, count, setShowDialog, show1 }) {
                 <span className="flex align-items-center gap-2">
                   <i className="pi pi-tag"></i>
                   <span className="font-semibold">
-                    Số lượng: {product.quantity}
+                    {value === "VNM" ? "Số lượng" : "Amount"}:{" "}
+                    {product.quantity}
                   </span>
                 </span>
                 <Tag
-                  value={product.inventoryStatus}
+                  value={value === "VNM" ? product.inventoryStatus : "In stock"}
                   severity={getSeverity(product)}
                 ></Tag>
               </div>
@@ -64,7 +81,7 @@ function Carts({ clicks, setCount, count, setShowDialog, show1 }) {
             <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
               <span className="text-2xl font-semibold">${coin}.000 VND</span>
               <Button
-                label="Xóa"
+                label={value === "VNM" ? "Xóa" : "Delete"}
                 onClick={() => {
                   setCount(count - 1);
                   setCart(product);
@@ -87,21 +104,27 @@ function Carts({ clicks, setCount, count, setShowDialog, show1 }) {
   }, 0);
   console.log(cart);
   const header = (
-    <h2 className="flex justify-content-center">Thông tin mua hàng</h2>
+    <h2 className="flex justify-content-center">
+      {value === "VNM" ? "Thông tin mua hàng" : "Purchase Information"}
+    </h2>
   );
   return (
     <div className="card">
       <Toast ref={toast} position="top-left" />
       <DataView value={clicks} itemTemplate={itemTemplate} />
       <div className="flex justify-content-around align-items-center">
-        <h3>Tổng tiền : ${res}.000 VND</h3>
+        <h3>
+          {value === "VNM" ? "Tổng tiền" : "Total Funds"} : ${res}.000 VND
+        </h3>
         <Button
-          label="Đặt hàng"
+          label={value === "VNM" ? "Đặt hàng" : "Place an order"}
           onClick={() => {
             if (res > 0) {
               setShowThanhToan(true);
             } else {
-              show();
+              {
+                value === "VNM" ? show3() : show();
+              }
             }
           }}
         />
@@ -115,6 +138,9 @@ function Carts({ clicks, setCount, count, setShowDialog, show1 }) {
           setShowThanhToan={setShowThanhToan}
           setShowDialog={setShowDialog}
           show1={show1}
+          value={value}
+          show5={show5}
+          setSoluong={setSoluong}
         />
       </Dialog>
     </div>
